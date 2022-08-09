@@ -8,7 +8,7 @@ Click the `Use this Template` button and provide details for your new repo.
 
 <img width="953" alt="Screen Shot 2022-07-06 at 7 24 02 AM" src="https://user-images.githubusercontent.com/10215173/177577141-b6a91585-a276-49d3-b66b-e47bd26665a0.png">
 
-## Add registry to `cloud_workspace.yaml`
+## Add registry to `dagster_cloud.yaml`
 
 The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. Here, you will need to specify the Docker registry to push your code location to in the `registry` key.
 
