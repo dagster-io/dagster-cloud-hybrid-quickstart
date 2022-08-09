@@ -1,8 +1,11 @@
 name: Serverless Branch Deployments
-on: {}
+on: workflow_dispatch
+
+# Uncomment to enable branch deployments [run on pull request]
 # on:
 #   runs-on:  pull_request:
 #     types: [opened, synchronize, reopened, closed]
+
 concurrency: 
   # Cancel in-progress runs on same branch
   group: ${{ github.ref }}
