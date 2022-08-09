@@ -79,6 +79,5 @@ jobs:
         with:
           dagster_cloud_api_token: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
           location: ${{ toJson(matrix.location) }}
-          env_vars: ${{ toJson(secrets) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
