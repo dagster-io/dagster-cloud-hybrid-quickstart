@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 # Uncomment to enable branch deployments [run on pull request]
 # on:
-#   runs-on:  pull_request:
+#   pull_request:
 #     types: [opened, synchronize, reopened, closed]
 
 concurrency: 
