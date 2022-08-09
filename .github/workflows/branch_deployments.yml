@@ -1,10 +1,12 @@
 name: Hybrid Branch Deployments
-on: workflow_dispatch
 
 # Uncomment to enable branch deployments [run on pull request]
 # on:
 #   pull_request:
 #     types: [opened, synchronize, reopened, closed]
+
+# Comment this out once you have enabled branch deployments
+on: workflow_dispatch
 
 concurrency: 
   # Cancel in-progress runs on same branch
