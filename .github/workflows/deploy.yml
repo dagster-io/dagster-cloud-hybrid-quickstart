@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "main"
+      - "benpankow/fix-org-id-param"
 concurrency: 
   # Cancel in-progress deploys to main branch
   group: ${{ github.ref }}
