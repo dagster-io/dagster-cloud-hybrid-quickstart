@@ -45,7 +45,7 @@ secrets are properly set up the Workflow properly sets up Docker regsitry access
 <img width="993" alt="Screen Shot 2022-08-08 at 9 07 25 PM" src="https://user-images.githubusercontent.com/10215173/183562119-90375ca1-c119-4154-8e30-8b85916628b8.png">
 
 
-## Adding or modfiying code locations
+## Adding or modifying code locations
 
 To add new code locations to be built or to modify the existing location definition, change the [input matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) at the top of each action file.
 
