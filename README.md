@@ -75,14 +75,13 @@ Once you have the `quickstart_etl` example deployed, add your Dagster project as
 
 2. Duplicate the `build-docker-image` and the `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
 
-# Disable branch deployments
+# Advanced customization
+
+## Disable branch deployments
 
 [Branch Deployments](https://docs.dagster.io/dagster-cloud/developing-testing/branch-deployments) are enabled by default. To disable them comment out the for your Hybrid agent, comment out the `pull_request` section in `dagster_cloud.yaml`:
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca0ed133f91ceb5f378ee67b3096a/.github/workflows/dagster-cloud-deploy.yml#L7-L8
-
-
-# Advanced customization
 
 ## Customize the Docker build process
 
