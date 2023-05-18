@@ -21,7 +21,7 @@ env:
   # Path to dagster_cloud.yaml relative to DAGSTER_PROJECT_DIR
   DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
   # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
-  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/dagster-cloud-image"
+  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   dagster-cloud-deploy:
