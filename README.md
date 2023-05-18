@@ -47,7 +47,7 @@ Edit the GitHub Workflow at
 
 ## Step 4. Set up secrets
 
-Set up secrets on your newly created repository by navigating to the `Settings` panel in your repo, clicking `Secrets` on the sidebar, and selecting `Actions`. Then, click `New repository secret`.
+Set up secrets on your newly created repository by navigating to the `Settings` panel in your repo, clicking `Secrets` on the sidebar, and selecting `Actions`. Then, click `New repository secret`. The following secrets are needed.
 
 
 | Name           | Description |
@@ -55,6 +55,7 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 | `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.io/dagster-cloud/account/managing-user-agent-tokens). |
 | Docker access secrets  | Depending on which Docker registry you are using, you must define the credentials listed in the workflow file. |
 
+Here is an example screenshot showing the secrets for AWS ECR.
 
 ![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/0167b321-a52c-4344-b76e-53c990334cb8)
 
