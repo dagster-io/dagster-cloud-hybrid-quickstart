@@ -14,7 +14,7 @@ concurrency:
 env:
   # The organization name in Dagster Cloud
   DAGSTER_CLOUD_ORGANIZATION: "<organization-name>"
-  # An API token generated in https://dagster.cloud/
+  # The API token from https://dagster.cloud/ should be stored in Secrets
   DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
   # Path to the root folder containing the dagster project
   DAGSTER_PROJECT_DIR: "."
@@ -75,7 +75,7 @@ jobs:
       # # https://github.com/aws-actions/amazon-ecr-login
       # - name: Configure AWS credentials
       #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: aws-actions/configure-aws-credentials@v1
+      #   uses: aws-actions/configure-aws-credentials@v2
       #   with:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -126,14 +126,14 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_REGISTRY }}:${{ env.IMAGE_TAG }}-quickstart-etl
+          tags: ${{ env.IMAGE_REGISTRY }}:${{ env.IMAGE_TAG }}-quickstart_etl
 
       - name: Update build session with image tag for quickstart_etl
         id: ci-set-build-output-example-location
         if: steps.prerun.outputs.result != 'skip'
         uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
-          command: "ci set-build-output --location-name=data-eng-pipeline --image-tag=$IMAGE_TAG-quickstart-etl"
+          command: "ci set-build-output --location-name=quickstart_etl --image-tag=$IMAGE_TAG-quickstart_etl"
 
       # Deploy all code locations in this build session to Dagster Cloud
       - name: Deploy to Dagster Cloud
