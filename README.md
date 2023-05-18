@@ -13,7 +13,9 @@ What you need to start using this template:
 
 3. A Docker container registry accessible from the hybrid agent and from your GitHub workflows.
 
-{% **Tip**: It is recommended to first deploy the example project included in this repository and then replace it with your own Dagster project. %}
+{% note %}
+**Tip**: It is recommended to first deploy the example project included in this repository and then replace it with your own Dagster project.
+{% endnote %}
 
 
 ## Step 1. Create a new repository from this template
