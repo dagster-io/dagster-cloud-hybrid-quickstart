@@ -69,16 +69,27 @@ secrets are properly set up the workflow properly sets up Docker regsitry access
 
 
 
-# Adding or modfiying code locations
+# Add or modify code locations
 
-To add new code locations or to modify the existing location definition:
+Once you have the example location deployed, add your Dagster project as a new code location. To add new code locations or to modify the existing location definition:
 
 1. Update `dagster_cloud.yaml` and add a new code location. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/code-locations) for details.
 
-2. Duplicate the `build-docker-image` and `"ci set-build-output"'` steps in `dagster-cloud-deploy.yaml` for the new code locations. 
+2. Duplicate the `build-docker-image` and `"ci set-build-output"'` steps in `dagster-cloud-deploy.yaml` for the new code locations.
 
-## Branch deployments
+# Disable branch deployments
 
 [Branch Deployments](https://docs.dagster.io/dagster-cloud/developing-testing/branch-deployments) are enabled by default. To disable them comment out the for your Hybrid agent, comment out the `pull_request` section in `dagster_cloud.yaml`:
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca0ed133f91ceb5f378ee67b3096a/.github/workflows/dagster-cloud-deploy.yml#L7-L8
+
+
+# Advanced customization
+
+## Customize the Docker build process
+
+A standard `Dockerfile` is included in this project and used to build the `example_location`. This file is used by the `build-push-action`:
+
+https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/fa0a0d3409fda4c342da41c970f568d32996747f/.github/workflows/dagster-cloud-deploy.yml#L123-L129
+
+To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed. You can specify a different `Dockerfile` for each code location by using the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
