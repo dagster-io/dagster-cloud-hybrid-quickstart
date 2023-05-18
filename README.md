@@ -73,7 +73,7 @@ Once you have the `quickstart_etl` example deployed, add your Dagster project as
 
 1. Update `dagster_cloud.yaml` and add a new code location. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/code-locations) for details.
 
-2. Duplicate the `build-docker-image` and `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
+2. Duplicate the `build-docker-image` and the `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
 
 # Disable branch deployments
 
