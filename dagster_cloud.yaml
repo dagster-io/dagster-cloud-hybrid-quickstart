@@ -1,8 +1,4 @@
 locations:
-  - location_name: example_location
+  - location_name: quickstart_etl
     code_source:
-      package_name: my_dagster_project
-    build:
-      directory: ./
-      registry: <account-id>.dkr.ecr.us-west-2.amazonaws.com/branch-deployments-gh-action-test
-
+      package_name: quickstart_etl

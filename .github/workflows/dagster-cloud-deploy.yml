@@ -113,27 +113,27 @@ jobs:
       #     username: _json_key
       #     password: ${{ secrets.GCR_JSON_KEY }}
 
-      # Build "example_location" location. 
+      # Build "quickstart_etl" location. 
       # For each code location, the "build-push-action" builds the docker
       # image and a "set-build-output" command records the image tag for each code location.
       # To re-use the same docker image across multiple code locations, build the docker image once
       # and specify the same tag in multiple "set-build-output" commands. To use a different docker
       # image for each code location, use multiple "build-push-actions" with a location specific
       # tag.
-      - name: Build and upload Docker image for "example_location"
+      - name: Build and upload Docker image for "quickstart_etl"
         if: steps.prerun.outputs.result != 'skip'
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ env.IMAGE_REGISTRY }}:${{ env.IMAGE_TAG }}-example-location
+          tags: ${{ env.IMAGE_REGISTRY }}:${{ env.IMAGE_TAG }}-quickstart-etl
 
-      - name: Update build session with image tag for example_location
+      - name: Update build session with image tag for quickstart_etl
         id: ci-set-build-output-example-location
         if: steps.prerun.outputs.result != 'skip'
         uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
-          command: "ci set-build-output --location-name=data-eng-pipeline --image-tag=$IMAGE_TAG-example-location"
+          command: "ci set-build-output --location-name=data-eng-pipeline --image-tag=$IMAGE_TAG-quickstart-etl"
 
       # Deploy all code locations in this build session to Dagster Cloud
       - name: Deploy to Dagster Cloud

@@ -24,7 +24,7 @@ Click the `Use this Template` button and provide details for your new repo.
 
 ## Step 2. Add your Docker registry to `dagster_cloud.yaml`
 
-The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For the `example_location`, specify the Docker registry in the `registry:` key:
+The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For the `quickstart_etl`, specify the Docker registry in the `registry:` key:
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/669cc3acac00a070b38ec50e0c158b0c3d8b6996/dagster_cloud.yaml#L7
 
@@ -62,7 +62,7 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 
 ## Step 5. Verify builds are successful
 
-At this point, the workflow run should complete successfully and you should see the `example_location` in https://dagster.cloud. If builds are failing, ensure that your
+At this point, the workflow run should complete successfully and you should see the `quickstart_etl` in https://dagster.cloud. If builds are failing, ensure that your
 secrets are properly set up the workflow properly sets up Docker regsitry access.
 
 <img width="993" alt="Screen Shot 2022-08-08 at 9 07 25 PM" src="https://user-images.githubusercontent.com/10215173/183562119-90375ca1-c119-4154-8e30-8b85916628b8.png">
@@ -87,7 +87,7 @@ https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca
 
 ## Customize the Docker build process
 
-A standard `Dockerfile` is included in this project and used to build the `example_location`. This file is used by the `build-push-action`:
+A standard `Dockerfile` is included in this project and used to build the `quickstart_etl`. This file is used by the `build-push-action`:
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/fa0a0d3409fda4c342da41c970f568d32996747f/.github/workflows/dagster-cloud-deploy.yml#L123-L129
 
@@ -105,5 +105,5 @@ The `ci-init` step accepts a `location_names` input string containing a JSON lis
           project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
           dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
           deployment: 'prod'
-          location_names: '["example_location1", "location2"]'  # only deploy these two locations
+          location_names: '["quickstart_etl1", "location2"]'  # only deploy these two locations
 ```
