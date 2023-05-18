@@ -2,26 +2,40 @@
 
 This template lets you get started using Dagster Cloud with a Hybrid agent.
 
-## Create a new repository from this template
+
+## Pre-requisites
+
+What you need to start using this template:
+
+1. A https://dasgster.cloud/ account using the Hybrid deployments.
+
+2. A [hybrid agent](https://docs.dagster.io/dagster-cloud/deployment/agents) up and running.
+
+3. A Docker container registry accessible from the hybrid agent and from your GitHub workflows.
+
+## 1. Create a new repository from this template
 
 Click the `Use this Template` button and provide details for your new repo.
 
 <img width="953" alt="Screen Shot 2022-07-06 at 7 24 02 AM" src="https://user-images.githubusercontent.com/10215173/177577141-b6a91585-a276-49d3-b66b-e47bd26665a0.png">
 
-## Add registry to `dagster_cloud.yaml`
 
-The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. Here, you will need to specify the Docker registry to push your code location to in the `registry` key.
+## 2. Add your Docker registry to `dagster_cloud.yaml`
+
+The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For each code location, specify the Docker registry in the `registry:` key. For example:
+
+https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/669cc3acac00a070b38ec50e0c158b0c3d8b6996/dagster_cloud.yaml#L7
 
 For more information on the possible configuration options, see [the Dagster Cloud docs](https://docs.dagster.cloud/guides/adding-code).
 
-## Modify GitHub Workflow
+## 2. Modify the GitHub Workflow
 
 Edit the [GitHub Workflows](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#create-an-example-workflow) at
-[`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) and 
-[`.github/workflows/branch_deployments.yml`](./.github/workflows/branch_deployments.yml) to set up Docker registry access. Uncomment the step associated with your
-registry (ECR, DockerHub, GCR etc.), and take note of which secrets will need to be defined for your particular platform.
+[`.github/workflows/dagster-cloud-deploy.yml`](./.github/workflows/dagster-cloud-deploy.yml) and configure your Dagster Cloud account as well as Docker registry access.
 
-## Set up secrets
+1. 
+
+## 3. Set up secrets
 
 Set up secrets on your newly created repository by navigating to the `Settings` panel in your repo, clicking `Secrets` on the sidebar, and selecting `Actions`. Then, click `New repository secret`.
 
@@ -29,7 +43,6 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 | Name           | Description |
 |----------------|-------------|
 | `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.cloud/auth#managing-user-and-agent-tokens). |
-| `ORGANIZATION_ID` | The organization ID of your Dagster Cloud organization, found in the URL. For example, `pied-piper` if your organization is found at `https://dagster.cloud/pied-piper` or `https://pied-piper.dagster.cloud/`. |
 | Docker access secrets  | Depending on which Docker registry you are using, you must define the credentials listed in the workflow file. |
 
 
