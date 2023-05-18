@@ -13,20 +13,18 @@ What you need to start using this template:
 
 3. A Docker container registry accessible from the hybrid agent and from your GitHub workflows.
 
-## 1. Create a new repository from this template
+## Step 1. Create a new repository from this template
 
-Click the `Use this Template` button and provide details for your new repo.
+Click the `Use this Template` button and provide details for your new repo. It is recommended to first deploy the example project included in this repository and then replace it with your own Dagster project.
 
 <img width="953" alt="Screen Shot 2022-07-06 at 7 24 02 AM" src="https://user-images.githubusercontent.com/10215173/177577141-b6a91585-a276-49d3-b66b-e47bd26665a0.png">
 
 
 ## 2. Add your Docker registry to `dagster_cloud.yaml`
 
-The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For each code location, specify the Docker registry in the `registry:` key. For example:
+The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For the `example_location`, specify the Docker registry in the `registry:` key:
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/669cc3acac00a070b38ec50e0c158b0c3d8b6996/dagster_cloud.yaml#L7
-
-For more information on the possible configuration options, see [the Dagster Cloud docs](https://docs.dagster.cloud/guides/adding-code).
 
 ## 2. Modify the GitHub Workflow
 
@@ -37,7 +35,14 @@ Edit the GitHub Workflow at
 
    https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L16
 
-2.
+
+2. Set the `IMAGE_REGISTRY` environment to the same regsitry specified in `dagster_cloud.yaml`:
+
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L24
+
+2. Uncomment one of the options for the Docker registry:
+
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L70-L114
 
 ## 3. Set up secrets
 

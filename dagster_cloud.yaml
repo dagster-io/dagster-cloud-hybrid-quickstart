@@ -4,5 +4,5 @@ locations:
       package_name: my_dagster_project
     build:
       directory: ./
-      registry: 764506304434.dkr.ecr.us-west-2.amazonaws.com/branch-deployments-gh-action-test
+      registry: <account-id>.dkr.ecr.us-west-2.amazonaws.com/branch-deployments-gh-action-test
 
