@@ -46,7 +46,7 @@ Edit the GitHub Workflow at
 
    https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L70-L114
 
-## 3. Set up secrets
+## Step 4. Set up secrets
 
 Set up secrets on your newly created repository by navigating to the `Settings` panel in your repo, clicking `Secrets` on the sidebar, and selecting `Actions`. Then, click `New repository secret`.
 
@@ -60,13 +60,12 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 <img width="994" alt="Screen Shot 2022-08-08 at 9 05 42 PM" src="https://user-images.githubusercontent.com/10215173/183562102-ae66b893-5ecf-4009-b5b2-2bc63c4714ab.png">
 
 
-## Step 4. Verify builds are successful
+## Step 5. Verify builds are successful
 
-At this point, the workflow run should complete successfully. If builds are failing, ensure that your
+At this point, the workflow run should complete successfully and you should see the `example_location` in https://dagster.cloud. If builds are failing, ensure that your
 secrets are properly set up the workflow properly sets up Docker regsitry access.
 
 <img width="993" alt="Screen Shot 2022-08-08 at 9 07 25 PM" src="https://user-images.githubusercontent.com/10215173/183562119-90375ca1-c119-4154-8e30-8b85916628b8.png">
-
 
 
 # Add or modify code locations
@@ -94,7 +93,7 @@ https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/fa0a0d3409fda
 
 To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed. You can specify a different `Dockerfile` for each code location by using the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
 
-## Deploying a subset of code locations
+## Deploy a subset of code locations
 
 The `ci-init` step accepts a `location_names` input string containing a json list of location names to be deployed. To deploy only specific locations provide the `location_names:` input, for example:
 ```
