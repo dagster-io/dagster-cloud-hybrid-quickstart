@@ -26,7 +26,7 @@ Click the `Use this Template` button and provide details for your new repo.
 
 The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For the `quickstart_etl`, specify the Docker registry in the `registry:` key:
 
-https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/669cc3acac00a070b38ec50e0c158b0c3d8b6996/dagster_cloud.yaml#L7
+./dagster_cloud.yaml#L7
 
 ## Step 3. Modify the GitHub Workflow
 
