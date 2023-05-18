@@ -38,11 +38,11 @@ Edit the GitHub Workflow at
    https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L16
 
 
-2. Set the `IMAGE_REGISTRY` environment to the same regsitry specified in `dagster_cloud.yaml`:
+2. Set the `IMAGE_REGISTRY` environment to the same registry specified in `dagster_cloud.yaml`:
 
    https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L24
 
-2. Uncomment one of the options for the Docker registry:
+2. Uncomment one of the options for loggin into the Docker registry:
 
    https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L70-L114
 
@@ -53,7 +53,7 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 
 | Name           | Description |
 |----------------|-------------|
-| `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.cloud/auth#managing-user-and-agent-tokens). |
+| `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.io/dagster-cloud/account/managing-user-agent-tokens). |
 | Docker access secrets  | Depending on which Docker registry you are using, you must define the credentials listed in the workflow file. |
 
 
@@ -62,15 +62,14 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 
 ## Step 5. Verify builds are successful
 
-At this point, the workflow run should complete successfully and you should see the `quickstart_etl` in https://dagster.cloud. If builds are failing, ensure that your
-secrets are properly set up the workflow properly sets up Docker regsitry access.
+At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up. For help reach out to us in our [Slack](https://dagster.io/community).
 
 <img width="993" alt="Screen Shot 2022-08-08 at 9 07 25 PM" src="https://user-images.githubusercontent.com/10215173/183562119-90375ca1-c119-4154-8e30-8b85916628b8.png">
 
 
 # Add or modify code locations
 
-Once you have the example location deployed, add your Dagster project as a new code location. To add new code locations or to modify the existing location definition:
+Once you have the example location deployed, add your Dagster project as a new code location. To add new code locations or to modify an existing location definition:
 
 1. Update `dagster_cloud.yaml` and add a new code location. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/code-locations) for details.
 
