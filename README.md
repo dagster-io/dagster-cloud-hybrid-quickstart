@@ -26,7 +26,7 @@ Click the `Use this Template` button and provide details for your new repo.
 
 The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For the `quickstart_etl`, specify the Docker registry in the `registry:` key:
 
-./dagster_cloud.yaml#L7
+https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/dagster_cloud.yaml#L7
 
 ## Step 3. Modify the GitHub Workflow
 
@@ -35,16 +35,15 @@ Edit the GitHub Workflow at
 
 1. Set the `DAGSTER_CLOUD_ORGANIZATION` environment to the name of your Dagster Cloud organization.
 
-   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L16
-
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L15-L16
 
 2. Set the `IMAGE_REGISTRY` environment to the same registry specified in `dagster_cloud.yaml`:
 
-   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L24
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L23-L24
 
-2. Uncomment one of the options for loggin into the Docker registry:
+2. Uncomment one of the options for logging into the Docker registry:
 
-   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L70-L114
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L70-L114
 
 ## Step 4. Set up secrets
 
@@ -57,19 +56,19 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 | Docker access secrets  | Depending on which Docker registry you are using, you must define the credentials listed in the workflow file. |
 
 
-<img width="994" alt="Screen Shot 2022-08-08 at 9 05 42 PM" src="https://user-images.githubusercontent.com/10215173/183562102-ae66b893-5ecf-4009-b5b2-2bc63c4714ab.png">
+![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/0167b321-a52c-4344-b76e-53c990334cb8)
 
 
 ## Step 5. Verify builds are successful
 
 At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up. For help reach out to us in our [Slack](https://dagster.io/community).
 
-<img width="993" alt="Screen Shot 2022-08-08 at 9 07 25 PM" src="https://user-images.githubusercontent.com/10215173/183562119-90375ca1-c119-4154-8e30-8b85916628b8.png">
+![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/6fba8e24-20f2-4cfb-9c0a-0111f381c0ac)
 
 
 # Add or modify code locations
 
-Once you have the example location deployed, add your Dagster project as a new code location. To add new code locations or to modify an existing location definition:
+Once you have the `quickstart_etl` example deployed, add your Dagster project as a new code location. To add new code locations or to modify an existing location definition:
 
 1. Update `dagster_cloud.yaml` and add a new code location. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/code-locations) for details.
 
@@ -90,7 +89,10 @@ A standard `Dockerfile` is included in this project and used to build the `quick
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/fa0a0d3409fda4c342da41c970f568d32996747f/.github/workflows/dagster-cloud-deploy.yml#L123-L129
 
-To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed. You can specify a different location for the `Dockerfile`by using the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
+To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed:
+
+- To use a different directory for the `Dockerfile`, use the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
+- To reuse a Docker image for multiple code locations, use a single `build-push-action` and multiple `"ci set-build-output"` steps, all using the same image tag.
 
 ## Deploy a subset of code locations
 
