@@ -91,11 +91,11 @@ A standard `Dockerfile` is included in this project and used to build the `examp
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/fa0a0d3409fda4c342da41c970f568d32996747f/.github/workflows/dagster-cloud-deploy.yml#L123-L129
 
-To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed. You can specify a different `Dockerfile` for each code location by using the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
+To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed. You can specify a different location for the `Dockerfile`by using the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
 
 ## Deploy a subset of code locations
 
-The `ci-init` step accepts a `location_names` input string containing a json list of location names to be deployed. To deploy only specific locations provide the `location_names:` input, for example:
+The `ci-init` step accepts a `location_names` input string containing a JSON list of location names to be deployed. To deploy only specific locations provide the `location_names:` input, for example:
 ```
       - name: Initialize build session
         id: ci-init
