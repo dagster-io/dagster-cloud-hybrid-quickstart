@@ -62,7 +62,7 @@ Here is an example screenshot showing the secrets for AWS ECR.
 
 ## Step 5. Verify builds are successful
 
-At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up. For help reach out to us in our [Slack](https://dagster.io/community).
+At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up. For help, please reach out to us in our [Slack](https://dagster.io/community).
 
 ![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/6fba8e24-20f2-4cfb-9c0a-0111f381c0ac)
 
