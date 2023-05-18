@@ -7,7 +7,7 @@ This template lets you get started using Dagster Cloud with a Hybrid agent.
 
 What you need to start using this template:
 
-1. A https://dasgster.cloud/ account using the Hybrid deployments.
+1. A [Dagster Cloud](https://dagster.cloud/) account using Hybrid deployments.
 
 2. A [hybrid agent](https://docs.dagster.io/dagster-cloud/deployment/agents) up and running.
 
