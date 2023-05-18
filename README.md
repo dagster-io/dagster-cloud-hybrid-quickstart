@@ -30,10 +30,14 @@ For more information on the possible configuration options, see [the Dagster Clo
 
 ## 2. Modify the GitHub Workflow
 
-Edit the [GitHub Workflows](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#create-an-example-workflow) at
-[`.github/workflows/dagster-cloud-deploy.yml`](./.github/workflows/dagster-cloud-deploy.yml) and configure your Dagster Cloud account as well as Docker registry access.
+Edit the GitHub Workflow at
+[`.github/workflows/dagster-cloud-deploy.yml`](./.github/workflows/dagster-cloud-deploy.yml) to configure your Dagster Cloud account as well as Docker registry access.
 
-1. 
+1. Set the `DAGSTER_CLOUD_ORGANIZATION` environment to the name of your Dagster Cloud organization.
+
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/5e65815bdfd08740ce8f2e36557fb2fc197b4264/.github/workflows/dagster-cloud-deploy.yml#L16
+
+2.
 
 ## 3. Set up secrets
 
