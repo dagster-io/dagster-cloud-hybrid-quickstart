@@ -33,7 +33,7 @@ https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a3
 Edit the GitHub Workflow at
 [`.github/workflows/dagster-cloud-deploy.yml`](./.github/workflows/dagster-cloud-deploy.yml) to configure your Dagster Cloud account as well as Docker registry access.
 
-1. Set the `DAGSTER_CLOUD_ORGANIZATION` environment to the name of your Dagster Cloud organization.
+1. Set the `DAGSTER_CLOUD_ORGANIZATION` environment to the name of your Dagster Cloud organization.  If you access Dagster Cloud at https://acme.dagster.cloud then your organization is acme.
 
    https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L15-L16
 
@@ -62,18 +62,18 @@ Here is an example screenshot showing the secrets for AWS ECR.
 
 ## Step 5. Verify builds are successful
 
-At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up. For help, please reach out to us in our [Slack](https://dagster.io/community).
+At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up.
 
 ![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/6fba8e24-20f2-4cfb-9c0a-0111f381c0ac)
 
 
 # Add or modify code locations
 
-Once you have the `quickstart_etl` example deployed, add your Dagster project as a new code location. To add new code locations or to modify an existing location definition:
+Once you have the `quickstart_etl` example deployed, you can replace the sample code with your Dagster project. You will then need to update the `dagster_cloud.yaml` file:
 
-1. Update `dagster_cloud.yaml` and add a new code location. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/code-locations) for details.
+1. Update `dagster_cloud.yaml`. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/dagster-cloud-yaml#dagster_cloudyaml) for details.
 
-2. Duplicate the `build-docker-image` and the `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
+2. If you have more than one code location, duplicate the `build-docker-image` and the `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
 
 # Advanced customization
 
