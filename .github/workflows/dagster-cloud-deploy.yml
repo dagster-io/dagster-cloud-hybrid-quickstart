@@ -67,6 +67,10 @@ jobs:
         if: steps.prerun.outputs.result != 'skip'
         run: echo "IMAGE_TAG=$GITHUB_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV && echo $IMAGE_TAG
 
+      # Enable buildx for caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       # Building and deploying the docker image requires a login step specific to the container
       # registry.
       # Multiple examples are provided below.
@@ -113,7 +117,7 @@ jobs:
       #     username: _json_key
       #     password: ${{ secrets.GCR_JSON_KEY }}
 
-      # Build "quickstart_etl" location. 
+      # Build the "quickstart_etl" location.
       # For each code location, the "build-push-action" builds the docker
       # image and a "set-build-output" command records the image tag for each code location.
       # To re-use the same docker image across multiple code locations, build the docker image once
@@ -127,6 +131,8 @@ jobs:
           context: .
           push: true
           tags: ${{ env.IMAGE_REGISTRY }}:${{ env.IMAGE_TAG }}-quickstart_etl
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Update build session with image tag for quickstart_etl
         id: ci-set-build-output-example-location
