@@ -1,0 +1,166 @@
+name: Dagster Cloud Hybrid Deployment
+on:
+  push: # For full deployments
+    branches:
+      - "main"
+      - "master"
+  pull_request:  # For branch deployments
+     types: [opened, synchronize, reopened, closed]
+
+concurrency: 
+  # Cancel in-progress deploys to the same branch
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+env:
+  # The organization name in Dagster Cloud
+  DAGSTER_CLOUD_ORGANIZATION: "<organization-name>"
+  # The API token from https://dagster.cloud/ should be stored in Secrets
+  DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
+  # Path to the root folder containing the dagster project
+  DAGSTER_PROJECT_DIR: "."
+  # Path to dagster_cloud.yaml relative to DAGSTER_PROJECT_DIR
+  DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
+  # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
+  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>"
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  dagster-cloud-deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      # If this is a closed PR the prerun step closes the branch deployment and returns 
+      # output.result='skip' which is used to skip other steps in this workflow. 
+      - name: Pre-run checks
+        id: prerun
+        uses: dagster-io/dagster-cloud-action/actions/utils/prerun@v0.1
+
+      # Checkout the project
+      - name: Checkout
+        uses: actions/checkout@v3      
+        if: steps.prerun.outputs.result != 'skip'
+        with:
+          ref: ${{ github.head_ref }}
+          
+      # Validate dagster_cloud.yaml and the connection to dagster.cloud
+      - name: Validate configuration
+        id: ci-validate
+        if: steps.prerun.outputs.result != 'skip'
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
+        with:
+          command: "ci check --project-dir ${{ env.DAGSTER_PROJECT_DIR }} --dagster-cloud-yaml-path ${{ env.DAGSTER_CLOUD_YAML_PATH }}"
+
+      # Parse dagster_cloud.yaml, detect if this is branch deployment and initialize the build session
+      - name: Initialize build session
+        id: ci-init
+        if: steps.prerun.outputs.result != 'skip'
+        uses: dagster-io/dagster-cloud-action/actions/utils/ci-init@v0.1
+        with:
+          project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
+          dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
+          # The full deployment name. If this run is for a PR, this value is ignored and a branch
+          # deployment is used. 
+          deployment: 'prod'
+
+      # Any value can be used as the docker image tag. It is recommended to use a unique value
+      # for each build so that multiple builds do not overwrite each other.
+      - name: Generate docker image tag
+        id: generate-image-tag
+        if: steps.prerun.outputs.result != 'skip'
+        run: echo "IMAGE_TAG=$GITHUB_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV && echo $IMAGE_TAG
+
+      # Enable buildx for caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Building and deploying the docker image requires a login step specific to the container
+      # registry.
+      # Multiple examples are provided below.
+
+      # # AWS ECR
+      # # https://github.com/aws-actions/amazon-ecr-login
+      # - name: Configure AWS credentials
+      #   if: steps.prerun.outputs.result != 'skip'
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region:  ${{ secrets.AWS_REGION }}
+      # - name: Login to ECR
+      #   if: steps.prerun.outputs.result != 'skip'
+      #   uses: aws-actions/amazon-ecr-login@v1
+
+      # # DockerHub
+      # # https://github.com/docker/login-action#docker-hub
+      # - name: Login to Docker Hub
+      #   if: steps.prerun.outputs.result != 'skip'
+      #   uses: docker/login-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # # GitHub Container Registry
+      # # https://github.com/docker/login-action#github-container-registry
+      # - name: Login to GitHub Container Registry
+      #   if: steps.prerun.outputs.result != 'skip'
+      #   uses: docker/login-action@v1
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      # # GCR
+      # # https://github.com/docker/login-action#google-container-registry-gcr
+      # - name: Login to GCR
+      #   if: steps.prerun.outputs.result != 'skip'
+      #   uses: docker/login-action@v1
+      #   with:
+      #     registry: gcr.io
+      #     username: _json_key
+      #     password: ${{ secrets.GCR_JSON_KEY }}
+
+      # Build the "quickstart_etl" location.
+      # For each code location, the "build-push-action" builds the docker
+      # image and a "set-build-output" command records the image tag for each code location.
+      # To re-use the same docker image across multiple code locations, build the docker image once
+      # and specify the same tag in multiple "set-build-output" commands. To use a different docker
+      # image for each code location, use multiple "build-push-actions" with a location specific
+      # tag.
+      - name: Build and upload Docker image for "quickstart_etl"
+        if: steps.prerun.outputs.result != 'skip'
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_REGISTRY }}:${{ env.IMAGE_TAG }}-quickstart_etl
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Update build session with image tag for quickstart_etl
+        id: ci-set-build-output-example-location
+        if: steps.prerun.outputs.result != 'skip'
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
+        with:
+          command: "ci set-build-output --location-name=quickstart_etl --image-tag=$IMAGE_TAG-quickstart_etl"
+
+      # Deploy all code locations in this build session to Dagster Cloud
+      - name: Deploy to Dagster Cloud
+        id: ci-deploy
+        if: steps.prerun.outputs.result != 'skip'
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
+        with:
+          command: "ci deploy"
+
+      # Update a PR comment - this runs always() so the comment is updated on success and failure
+      - name: Update PR comment for branch deployments
+        id: ci-notify
+        if: steps.prerun.outputs.result != 'skip' && always()
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
+        with:
+          command: "ci notify --project-dir=${{ env.DAGSTER_PROJECT_DIR }}"
+
+      # Generate a summary that shows up on the Workflow Summary page
+      - name: Generate a summary
+        id: ci-summary
+        if: steps.prerun.outputs.result != 'skip' && always()
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1.27
+        with:
+          command: "ci status --output-format=markdown >> $GITHUB_STEP_SUMMARY"

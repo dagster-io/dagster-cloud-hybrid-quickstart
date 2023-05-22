@@ -1,10 +1,17 @@
 from setuptools import find_packages, setup
 
-if __name__ == "__main__":
-    setup(
-        name="my_dagster_project",
-        packages=find_packages(exclude=["my_dagster_project_tests"]),
-        install_requires=[
-            "dagster",
-        ],
-    )
+setup(
+    name="quickstart_etl",
+    packages=find_packages(exclude=["quickstart_etl_tests"]),
+    install_requires=[
+        "dagster",
+        "dagster-cloud",
+        "boto3",
+        "pandas",
+        "matplotlib",
+        "textblob",
+        "tweepy",
+        "wordcloud",
+    ],
+    extras_require={"dev": ["dagit", "pytest"]},
+)

@@ -2,90 +2,109 @@
 
 This template lets you get started using Dagster Cloud with a Hybrid agent.
 
-## Create a new repository from this template
+> **Note**
+> It is recommended to first deploy the example project included in this repository and then replace it with your own Dagster project.
+
+## Pre-requisites
+
+What you need to start using this template:
+
+1. A [Dagster Cloud](https://dagster.cloud/) account set up for Hybrid deployments.
+
+2. A [Hybrid agent](https://docs.dagster.io/dagster-cloud/deployment/agents) up and running.
+
+3. A Docker container registry accessible from the hybrid agent and from your GitHub workflows.
+
+## Step 1. Create a new repository from this template
 
 Click the `Use this Template` button and provide details for your new repo.
 
 <img width="953" alt="Screen Shot 2022-07-06 at 7 24 02 AM" src="https://user-images.githubusercontent.com/10215173/177577141-b6a91585-a276-49d3-b66b-e47bd26665a0.png">
 
-## Add registry to `dagster_cloud.yaml`
 
-The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. Here, you will need to specify the Docker registry to push your code location to in the `registry` key.
+## Step 2. Add your Docker registry to `dagster_cloud.yaml`
 
-For more information on the possible configuration options, see [the Dagster Cloud docs](https://docs.dagster.cloud/guides/adding-code).
+The [`dagster_cloud.yaml`](./dagster_cloud.yaml) file defines the configuration for building and deploying your code locations. For the `quickstart_etl`, specify the Docker registry in the `registry:` key:
 
-## Modify GitHub Workflow
+https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/dagster_cloud.yaml#L7
 
-Edit the [GitHub Workflows](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#create-an-example-workflow) at
-[`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) and 
-[`.github/workflows/branch_deployments.yml`](./.github/workflows/branch_deployments.yml) to set up Docker registry access. Uncomment the step associated with your
-registry (ECR, DockerHub, GCR etc.), and take note of which secrets will need to be defined for your particular platform.
+## Step 3. Modify the GitHub Workflow
 
-## Set up secrets
+Edit the GitHub Workflow at
+[`.github/workflows/dagster-cloud-deploy.yml`](./.github/workflows/dagster-cloud-deploy.yml) to configure your Dagster Cloud account as well as Docker registry access.
 
-Set up secrets on your newly created repository by navigating to the `Settings` panel in your repo, clicking `Secrets` on the sidebar, and selecting `Actions`. Then, click `New repository secret`.
+1. Set the `DAGSTER_CLOUD_ORGANIZATION` environment to the name of your Dagster Cloud organization.  If you access Dagster Cloud at https://acme.dagster.cloud then your organization is acme.
+
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L15-L16
+
+2. Set the `IMAGE_REGISTRY` environment to the same registry specified in `dagster_cloud.yaml`:
+
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L23-L24
+
+2. Uncomment one of the options for logging into the Docker registry:
+
+   https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/38c16ddfa54a31067c961e0529a58f6f69001072/.github/workflows/dagster-cloud-deploy.yml#L70-L114
+
+## Step 4. Set up secrets
+
+Set up secrets on your newly created repository by navigating to the `Settings` panel in your repo, clicking `Secrets` on the sidebar, and selecting `Actions`. Then, click `New repository secret`. The following secrets are needed.
 
 
 | Name           | Description |
 |----------------|-------------|
-| `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.cloud/auth#managing-user-and-agent-tokens). |
-| `ORGANIZATION_ID` | The organization ID of your Dagster Cloud organization, found in the URL. For example, `pied-piper` if your organization is found at `https://dagster.cloud/pied-piper` or `https://pied-piper.dagster.cloud/`. |
+| `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.io/dagster-cloud/account/managing-user-agent-tokens). |
 | Docker access secrets  | Depending on which Docker registry you are using, you must define the credentials listed in the workflow file. |
 
+Here is an example screenshot showing the secrets for AWS ECR.
 
-<img width="994" alt="Screen Shot 2022-08-08 at 9 05 42 PM" src="https://user-images.githubusercontent.com/10215173/183562102-ae66b893-5ecf-4009-b5b2-2bc63c4714ab.png">
-
-
-## Verify builds are successful
-
-At this point, the Workflow should complete successfully. If builds are failing, ensure that your
-secrets are properly set up the Workflow properly sets up Docker regsitry access.
+![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/0167b321-a52c-4344-b76e-53c990334cb8)
 
 
-<img width="993" alt="Screen Shot 2022-08-08 at 9 07 25 PM" src="https://user-images.githubusercontent.com/10215173/183562119-90375ca1-c119-4154-8e30-8b85916628b8.png">
+## Step 5. Verify builds are successful
+
+At this point, the workflow run should complete successfully and you should see the `quickstart_etl` location in https://dagster.cloud. If builds are failing, ensure that your secrets are properly set up.
+
+![image](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/assets/7066873/6fba8e24-20f2-4cfb-9c0a-0111f381c0ac)
 
 
-## Adding or modfiying code locations
+# Add or modify code locations
 
-To add new code locations to be built or to modify the existing location definition, change the [input matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs) at the top of each action file.
+Once you have the `quickstart_etl` example deployed, you can replace the sample code with your Dagster project. You will then need to update the `dagster_cloud.yaml` file:
 
-For example:
+1. Update `dagster_cloud.yaml`. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/dagster-cloud-yaml#dagster_cloudyaml) for details.
 
-```yaml
-matrix:
-  # Here, define the code locations that should be built and deployed
-  location:
-    - name: foo_location
-      # Dockerfile location
-      build_folder: my_package/foo_location
-      # Docker registry URL
-      registry: https://364536301934.dkr.ecr.us-west-2.amazonaws.com/foo-location
-      # Path to file containing location definition
-      location_file: cloud_workspace.yaml
-    - name: bar_location
-      build_folder: my_package/bar_location
-      registry: https://364536301934.dkr.ecr.us-west-2.amazonaws.com/bar-location
-      location_file: cloud_workspace.yaml
+2. If you have more than one code location, duplicate the `build-docker-image` and the `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
+
+# Advanced customization
+
+## Disable branch deployments
+
+[Branch Deployments](https://docs.dagster.io/dagster-cloud/developing-testing/branch-deployments) are enabled by default. To disable them comment out the for your Hybrid agent, comment out the `pull_request` section in `dagster_cloud.yaml`:
+
+https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca0ed133f91ceb5f378ee67b3096a/.github/workflows/dagster-cloud-deploy.yml#L7-L8
+
+## Customize the Docker build process
+
+A standard `Dockerfile` is included in this project and used to build the `quickstart_etl`. This file is used by the `build-push-action`:
+
+https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/fa0a0d3409fda4c342da41c970f568d32996747f/.github/workflows/dagster-cloud-deploy.yml#L123-L129
+
+To customize the Docker image, modify the `build-push-action` and update the `Dockerfile` as needed:
+
+- To use a different directory for the `Dockerfile`, use the `context:` input. See [build-push-action](https://github.com/docker/build-push-action) for more details.
+- To reuse a Docker image for multiple code locations, use a single `build-push-action` and multiple `"ci set-build-output"` steps, all using the same image tag.
+
+## Deploy a subset of code locations
+
+The `ci-init` step accepts a `location_names` input string containing a JSON list of location names to be deployed. To deploy only specific locations provide the `location_names:` input, for example:
 ```
-
-The `location_file` specified can either contain a single location's
-definition, or a list of multiple locations' definitions.
-
-
-## Enable branch deployments
-
-To enable [Branch Deployments](https://docs.dagster.io/dagster-cloud/developing-testing/branch-deployments) for your Hybrid agent, you will need to:
-
-1. Ensure your agent is set up to run Branch Deployments.
-2. Uncomment the triggers in the 
-[`.github/workflows/branch_deployments.yml`](./.github/workflows/branch_deployments.yml) workflow file:
-
-```yaml
-# Uncomment to enable branch deployments [run on pull request]
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-
-# Comment this out once you have enabled branch deployments
-# on: workflow_dispatch
+      - name: Initialize build session
+        id: ci-init
+        if: steps.prerun.outputs.result != 'skip'
+        uses: dagster-io/dagster-cloud-action/actions/utils/ci-init@v0.1
+        with:
+          project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
+          dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
+          deployment: 'prod'
+          location_names: '["quickstart_etl1", "location2"]'  # only deploy these two locations
 ```
