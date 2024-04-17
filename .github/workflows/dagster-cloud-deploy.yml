@@ -161,6 +161,6 @@ jobs:
       - name: Generate a summary
         id: ci-summary
         if: steps.prerun.outputs.result != 'skip' && always()
-        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1.27
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
           command: "ci status --output-format=markdown >> $GITHUB_STEP_SUMMARY"
