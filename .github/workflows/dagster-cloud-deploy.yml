@@ -35,7 +35,7 @@ jobs:
 
       # Checkout the project
       - name: Checkout
-        uses: actions/checkout@v3      
+        uses: actions/checkout@v4     
         if: steps.prerun.outputs.result != 'skip'
         with:
           ref: ${{ github.head_ref }}
@@ -69,7 +69,7 @@ jobs:
 
       # Enable buildx for caching
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       # Building and deploying the docker image requires a login step specific to the container
       # registry.
@@ -79,15 +79,16 @@ jobs:
       # # https://github.com/aws-actions/amazon-ecr-login
       # - name: Configure AWS credentials
       #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: aws-actions/configure-aws-credentials@v2
+      #   uses: aws-actions/configure-aws-credentials@v4
       #   with:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     aws-region:  ${{ secrets.AWS_REGION }}
       # - name: Login to ECR
       #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: aws-actions/amazon-ecr-login@v1
-
+      #   uses: aws-actions/amazon-ecr-login@v2
+      #   with: 
+      #     mask-password: 'true' 
       # # DockerHub
       # # https://github.com/docker/login-action#docker-hub
       # - name: Login to Docker Hub
@@ -126,7 +127,7 @@ jobs:
       # tag.
       - name: Build and upload Docker image for "quickstart_etl"
         if: steps.prerun.outputs.result != 'skip'
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
