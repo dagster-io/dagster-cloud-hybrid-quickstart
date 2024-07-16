@@ -7,7 +7,7 @@ on:
   pull_request:  # For branch deployments
      types: [opened, synchronize, reopened, closed]
 
-concurrency: 
+concurrency:
   # Cancel in-progress deploys to the same branch
   group: ${{ github.ref }}
   cancel-in-progress: true
@@ -27,19 +27,19 @@ jobs:
   dagster-cloud-deploy:
     runs-on: ubuntu-20.04
     steps:
-      # If this is a closed PR the prerun step closes the branch deployment and returns 
-      # output.result='skip' which is used to skip other steps in this workflow. 
+      # If this is a closed PR the prerun step closes the branch deployment and returns
+      # output.result='skip' which is used to skip other steps in this workflow.
       - name: Pre-run checks
         id: prerun
         uses: dagster-io/dagster-cloud-action/actions/utils/prerun@v0.1
 
       # Checkout the project
       - name: Checkout
-        uses: actions/checkout@v3      
+        uses: actions/checkout@v3
         if: steps.prerun.outputs.result != 'skip'
         with:
           ref: ${{ github.head_ref }}
-          
+
       # Validate dagster_cloud.yaml and the connection to dagster.cloud
       - name: Validate configuration
         id: ci-validate
@@ -56,8 +56,8 @@ jobs:
         with:
           project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
           dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
-          # The full deployment name. If this run is for a PR, this value is ignored and a branch
-          # deployment is used. 
+          # A full deployment name. If this run is for a pull request, this value will be used as
+          # the base deployment for the branch deployment.
           deployment: 'prod'
 
       # Any value can be used as the docker image tag. It is recommended to use a unique value
