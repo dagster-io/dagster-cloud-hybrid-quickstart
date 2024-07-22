@@ -1,7 +1,7 @@
 locations:
   - location_name: quickstart_etl
     code_source:
-      package_name: quickstart_etl
+      package_name: quickstart_etl.definitions
     build:
       directory: ./
       registry: <account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>
