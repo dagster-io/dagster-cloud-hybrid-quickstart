@@ -9,7 +9,7 @@ on:
 
 concurrency:
   # Cancel in-progress deploys to the same branch
-  group: ${{ github.ref }}
+  group: ${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 env:
   # The organization name in Dagster Cloud
