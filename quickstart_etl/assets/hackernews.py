@@ -40,7 +40,7 @@ def hackernews_topstories(
     # Dagster supports attaching arbitrary metadata to asset materializations. This metadata will be
     # shown in the run logs and also be displayed on the "Activity" tab of the "Asset Details" page in the UI.
     # This metadata would be useful for monitoring and maintaining the asset as you iterate.
-    # Read more about in asset metadata in https://docs.dagster.io/concepts/assets/software-defined-assets#recording-materialization-metadata
+    # Read more about in asset metadata in https://docs.dagster.io/guides/build/assets/metadata-and-tags/#runtime-metadata
     context.add_output_metadata(
         {
             "num_records": len(df),
@@ -77,7 +77,7 @@ def hackernews_topstories_word_cloud(
     md_content = f"![img](data:image/png;base64,{image_data.decode()})"
 
     # Attach the Markdown content as metadata to the asset
-    # Read about more metadata types in https://docs.dagster.io/_apidocs/ops#metadata-types
+    # Read about more metadata types in https://docs.dagster.io/api/python-api/metadata#metadata-types
     context.add_output_metadata({"plot": MetadataValue.md(md_content)})
 
     return image_data
