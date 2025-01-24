@@ -11,7 +11,7 @@ What you need to start using this template:
 
 1. A [Dagster Cloud](https://dagster.cloud/) account set up for Hybrid deployments.
 
-2. A [Hybrid agent](https://docs.dagster.io/dagster-cloud/deployment/agents) up and running.
+2. A [Hybrid agent](https://docs.dagster.io/dagster-plus/deployment/deployment-types/hybrid/) up and running.
 
 3. A Docker container registry accessible from the hybrid agent and from your GitHub workflows.
 
@@ -52,7 +52,7 @@ Set up secrets on your newly created repository by navigating to the `Settings` 
 
 | Name           | Description |
 |----------------|-------------|
-| `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.io/dagster-cloud/account/managing-user-agent-tokens). |
+| `DAGSTER_CLOUD_API_TOKEN` | An agent token, for more details see [the Dagster Cloud docs](https://docs.dagster.io/deployment/management/tokens/agent-tokens). |
 | Docker access secrets  | Depending on which Docker registry you are using, you must define the credentials listed in the workflow file. |
 
 Here is an example screenshot showing the secrets for AWS ECR.
@@ -71,7 +71,7 @@ At this point, the workflow run should complete successfully and you should see 
 
 Once you have the `quickstart_etl` example deployed, you can replace the sample code with your Dagster project. You will then need to update the `dagster_cloud.yaml` file:
 
-1. Update `dagster_cloud.yaml`. See [documentation](https://docs.dagster.io/dagster-cloud/managing-deployments/dagster-cloud-yaml#dagster_cloudyaml) for details.
+1. Update `dagster_cloud.yaml`. See [documentation](https://docs.dagster.io/dagster-plus/deployment/code-locations/dagster-cloud-yaml) for details.
 
 2. If you have more than one code location, duplicate the `build-docker-image` and the `"ci set-build-output"` steps in `dagster-cloud-deploy.yaml` for the new code locations.
 
@@ -79,7 +79,7 @@ Once you have the `quickstart_etl` example deployed, you can replace the sample 
 
 ## Disable branch deployments
 
-[Branch Deployments](https://docs.dagster.io/dagster-cloud/developing-testing/branch-deployments) are enabled by default. To disable them comment out the for your Hybrid agent, comment out the `pull_request` section in `dagster_cloud.yaml`:
+[Branch Deployments](https://docs.dagster.io/dagster-plus/features/ci-cd/branch-deployments/) are enabled by default. To disable them comment out the for your Hybrid agent, comment out the `pull_request` section in `dagster_cloud.yaml`:
 
 https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca0ed133f91ceb5f378ee67b3096a/.github/workflows/dagster-cloud-deploy.yml#L7-L8
 
