@@ -6,6 +6,7 @@ on:
       - "master"
   pull_request:  # For branch deployments
      types: [opened, synchronize, reopened, closed]
+  workflow_dispatch:  # For manual runs
 
 concurrency:
   # Cancel in-progress deploys to the same branch
