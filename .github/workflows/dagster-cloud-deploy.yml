@@ -38,9 +38,10 @@ jobs:
 
       # Checkout the project
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         if: steps.prerun.outputs.result != 'skip'
         with:
+          repository: mlarose/dagster-cloud-hybrid-quickstart
           ref: ${{ github.head_ref }}
 
       # Validate dagster_cloud.yaml and the connection to dagster.cloud
