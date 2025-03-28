@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 env:
   # The organization name in Dagster Cloud
-  DAGSTER_CLOUD_ORGANIZATION: "<organization-name>"
+  DAGSTER_CLOUD_ORGANIZATION: "mlarose.dogfood"
+  DAGSTER_CLOUD_DEPLOYMENT: "docker"
   # The API token from https://dagster.cloud/ should be stored in Secrets
   DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
   # Path to the root folder containing the dagster project
@@ -21,8 +22,10 @@ env:
   # Path to dagster_cloud.yaml relative to DAGSTER_PROJECT_DIR
   DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
   # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
-  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>"
+  IMAGE_REGISTRY: 696822819628.dkr.ecr.us-east-1.amazonaws.com/dagster/user-code"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  FAKE_GIT_URL: "https://gitlab-ci-token:glcbt-99_some-garbage-string@gitlab.com/fake/it/till/you/make/it.git"
+
 jobs:
   dagster-cloud-deploy:
     runs-on: ubuntu-22.04
@@ -48,17 +51,32 @@ jobs:
         with:
           command: "ci check --project-dir ${{ env.DAGSTER_PROJECT_DIR }} --dagster-cloud-yaml-path ${{ env.DAGSTER_CLOUD_YAML_PATH }}"
 
-      # Parse dagster_cloud.yaml, detect if this is branch deployment and initialize the build session
+#      # Parse dagster_cloud.yaml, detect if this is branch deployment and initialize the build session
+#      - name: Initialize build session
+#        id: ci-init
+#        if: steps.prerun.outputs.result != 'skip'
+#        uses: dagster-io/dagster-cloud-action/actions/utils/ci-init@v0.1
+#        with:
+#          project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
+#          dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
+#          # A full deployment name. If this run is for a pull request, this value will be used as
+#          # the base deployment for the branch deployment.
+#          deployment: 'docker'
+
       - name: Initialize build session
         id: ci-init
         if: steps.prerun.outputs.result != 'skip'
-        uses: dagster-io/dagster-cloud-action/actions/utils/ci-init@v0.1
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
-          project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
-          dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
-          # A full deployment name. If this run is for a pull request, this value will be used as
-          # the base deployment for the branch deployment.
-          deployment: 'prod'
+          command: >
+            ci set-build-output
+            --project-dir ${{ env.DAGSTER_PROJECT_DIR }}
+            --dagster-cloud-yaml-path ${{ env.DAGSTER_CLOUD_YAML_PATH }}
+            --deployment-name=${{ env.DAGSTER_CLOUD_DEPLOYMENT }}
+            --location-name=quickstart_etl
+            --status-url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            --git-url=${{ env.FAKE_GIT_URL }}
+            --commit-hash=${{ github.event.pull_request.head.sha }}
 
       # Any value can be used as the docker image tag. It is recommended to use a unique value
       # for each build so that multiple builds do not overwrite each other.
