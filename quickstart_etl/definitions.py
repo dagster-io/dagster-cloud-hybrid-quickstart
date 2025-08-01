@@ -1,16 +1,8 @@
-from dagster import (
-    Definitions,
-    ScheduleDefinition,
-    define_asset_job,
-    load_assets_from_package_module,
-)
+from pathlib import Path
 
-from . import assets
+import dagster as dg
 
-daily_refresh_schedule = ScheduleDefinition(
-    job=define_asset_job(name="all_assets_job"), cron_schedule="0 0 * * *"
-)
 
-defs = Definitions(
-    assets=load_assets_from_package_module(assets), schedules=[daily_refresh_schedule]
-)
+@dg.definitions
+def defs():
+    return dg.load_from_defs_folder(project_root=Path(__file__).parent.parent)
