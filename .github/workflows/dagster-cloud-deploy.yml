@@ -74,7 +74,7 @@ jobs:
       # Building and deploying the docker image requires a login step specific to the container
       # registry.
       # Multiple examples are provided below.
-      
+
       # # AWS ECR
       # # https://github.com/aws-actions/amazon-ecr-login
       # - name: Configure AWS credentials
