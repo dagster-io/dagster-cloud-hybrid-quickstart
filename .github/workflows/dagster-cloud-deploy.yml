@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 env:
   # The organization name in Dagster Cloud
-  DAGSTER_CLOUD_ORGANIZATION: "<organization-name>"
+  DAGSTER_CLOUD_ORGANIZATION: "hooli"
   # The API token from https://dagster.cloud/ should be stored in Secrets
   DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
   # Path to the root folder containing the dagster project
@@ -21,7 +21,7 @@ env:
   # Path to dagster_cloud.yaml relative to DAGSTER_PROJECT_DIR
   DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
   # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
-  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>"
+  IMAGE_REGISTRY: "764506304434.dkr.ecr.us-west-2.amazonaws.com/hooli-data-science-prod"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   dagster-cloud-deploy:
@@ -74,7 +74,19 @@ jobs:
       # Building and deploying the docker image requires a login step specific to the container
       # registry.
       # Multiple examples are provided below.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        if: steps.prerun.outputs.result != 'skip'
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:  us-west-2
 
+      - name: Login to ECR
+        if: ${{ steps.prerun.outputs.result != 'skip' }}
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: 'true'
       # # AWS ECR
       # # https://github.com/aws-actions/amazon-ecr-login
       # - name: Configure AWS credentials
