@@ -70,7 +70,7 @@ At this point, the workflow run should complete successfully and you should see 
 
 ## 6. Run this project locally
 
-Now that your GitHub repo is setup with CI/CD to deploy to Dagster+, you can run this project locally.
+Now that your project builds successfully in Dagster+ Hybrid, you can run it locally.
 
 1. Create a virtual environment with `uv` or `venv`.
 2. Install local developement dependencies with `uv` or `pip`:
