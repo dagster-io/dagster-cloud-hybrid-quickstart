@@ -105,9 +105,18 @@ Once you have the `quickstart_etl` example deployed, you can replace the sample 
 
 ## Disable branch deployments
 
-[Branch Deployments](https://docs.dagster.io/deployment/dagster-plus/ci-cd/branch-deployments) are enabled by default. To disable them, comment out the `pull_request` section in `dagster-cloud-deploy.yml`:
+[Branch Deployments](https://docs.dagster.io/deployment/dagster-plus/ci-cd/branch-deployments) are enabled by default. To disable them, comment out the `pull_request` section in [`dagster-cloud-deploy.yml`](https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca0ed133f91ceb5f378ee67b3096a/.github/workflows/dagster-cloud-deploy.yml):
 
-https://github.com/dagster-io/dagster-cloud-hybrid-quickstart/blob/9f63f62b1a7ca0ed133f91ceb5f378ee67b3096a/.github/workflows/dagster-cloud-deploy.yml#L7-L8
+```yaml
+name: Dagster Cloud Hybrid Deployment
+on:
+  push: # For full deployments
+    branches:
+      - "main"
+      - "master"
+#  pull_request:  # For branch deployments
+#     types: [opened, synchronize, reopened, closed]
+```
 
 ## Customize the Docker build process
 
