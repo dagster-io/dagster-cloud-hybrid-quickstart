@@ -5,5 +5,5 @@ locations:
     working_directory: ./src/
     build:
       directory: ./
-      registry: 764506304434.dkr.ecr.us-west-2.amazonaws.com/hooli-data-science-prod
+      registry: <account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>
       # registry: ghcr.io/<org>/<image-name>

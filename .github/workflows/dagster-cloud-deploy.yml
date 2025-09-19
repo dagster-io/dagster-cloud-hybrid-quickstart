@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 env:
   # The organization name in Dagster Cloud
-  DAGSTER_CLOUD_ORGANIZATION: "hooli"
+  DAGSTER_CLOUD_ORGANIZATION: "<organization-name>"
   # The API token from https://dagster.cloud/ should be stored in Secrets
   DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
   # Path to the root folder containing the dagster project
@@ -21,7 +21,7 @@ env:
   # Path to dagster_cloud.yaml relative to DAGSTER_PROJECT_DIR
   DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
   # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
-  IMAGE_REGISTRY: "764506304434.dkr.ecr.us-west-2.amazonaws.com/hooli-data-science-prod"
+  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   dagster-cloud-deploy:
@@ -31,7 +31,7 @@ jobs:
       # output.result='skip' which is used to skip other steps in this workflow.
       - name: Pre-run checks
         id: prerun
-        uses: dagster-io/dagster-cloud-action/actions/utils/prerun@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/prerun@v0.1
 
       # Checkout the project
       - name: Checkout
@@ -44,7 +44,7 @@ jobs:
       - name: Validate configuration
         id: ci-validate
         if: steps.prerun.outputs.result != 'skip'
-        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
           command: "ci check --project-dir ${{ env.DAGSTER_PROJECT_DIR }} --dagster-cloud-yaml-path ${{ env.DAGSTER_CLOUD_YAML_PATH }}"
 
@@ -52,13 +52,13 @@ jobs:
       - name: Initialize build session
         id: ci-init
         if: steps.prerun.outputs.result != 'skip'
-        uses: dagster-io/dagster-cloud-action/actions/utils/ci-init@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/ci-init@v0.1
         with:
           project_dir: ${{ env.DAGSTER_PROJECT_DIR }}
           dagster_cloud_yaml_path: ${{ env.DAGSTER_CLOUD_YAML_PATH }}
           # A full deployment name. If this run is for a pull request, this value will be used as
           # the base deployment for the branch deployment.
-          deployment: 'data-eng-prod'
+          deployment: 'prod'
 
       # Any value can be used as the docker image tag. It is recommended to use a unique value
       # for each build so that multiple builds do not overwrite each other.
@@ -74,20 +74,6 @@ jobs:
       # Building and deploying the docker image requires a login step specific to the container
       # registry.
       # Multiple examples are provided below.
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        if: steps.prerun.outputs.result != 'skip'
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region:  us-west-2
-
-      - name: Login to ECR
-        if: ${{ steps.prerun.outputs.result != 'skip' }}
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          mask-password: 'true'
 
       # # AWS ECR
       # # https://github.com/aws-actions/amazon-ecr-login
@@ -161,7 +147,7 @@ jobs:
       - name: Update build session with image tag for quickstart_etl
         id: ci-set-build-output-example-location
         if: steps.prerun.outputs.result != 'skip'
-        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
           command: "ci set-build-output --location-name=quickstart_etl --image-tag=$IMAGE_TAG-quickstart_etl"
 
@@ -169,7 +155,7 @@ jobs:
       - name: Deploy to Dagster Cloud
         id: ci-deploy
         if: steps.prerun.outputs.result != 'skip'
-        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
           command: "ci deploy"
 
@@ -177,7 +163,7 @@ jobs:
       - name: Update PR comment for branch deployments
         id: ci-notify
         if: steps.prerun.outputs.result != 'skip' && always()
-        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
           command: "ci notify --project-dir=${{ env.DAGSTER_PROJECT_DIR }}"
 
@@ -185,6 +171,6 @@ jobs:
       - name: Generate a summary
         id: ci-summary
         if: steps.prerun.outputs.result != 'skip' && always()
-        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v1.11.9
+        uses: dagster-io/dagster-cloud-action/actions/utils/dagster-cloud-cli@v0.1
         with:
           command: "ci status --output-format=markdown >> $GITHUB_STEP_SUMMARY"
